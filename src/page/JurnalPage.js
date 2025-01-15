@@ -21,7 +21,7 @@ function JournalPage() {
     const [startDate, setStartDate] = useState(new Date());
     const [noJurnal,setNoJurnal] = useState([]);  
     const [noJurnalVal,setNoJurnalVal] = useState(1);  
-   
+    const [typeJurnal,setTypeJurnal] =useState("umum");
 
     function CustomInput({value,onClick}){
         return(
@@ -37,6 +37,13 @@ function JournalPage() {
             </div>
         );
     }
+    const handleTypeJurnalChange = (e) =>{
+        const { value } = e.target;
+        setTypeJurnal(value);
+        if(typeJurnal !== "umum"){
+            setIsCliked(bool => !bool);
+          }
+    }
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         if (name === 'amount') {
@@ -50,7 +57,6 @@ function JournalPage() {
     };
     const handleChangeNoVal =(e)=>{
         const { value } = e.target;
-        console.log(value);
         setNoJurnalVal(value);
         if(noJurnalVal > 1){
           setIsCliked(bool => !bool);
@@ -167,7 +173,7 @@ function JournalPage() {
     useEffect(() => { 
         const fetchHalData = ()=>{
             setLoading(true);    
-            fetch(`http://localhost:7000/api/transactions/umum/hal?halaman=${noJurnalVal}`)
+            fetch(`http://localhost:7000/api/transactions/${typeJurnal}/hal?halaman=${noJurnalVal}`)
                 .then((response) => response.json())
                 .then((data) => {  
                     setNoJurnal(data.data);
@@ -181,7 +187,7 @@ function JournalPage() {
         }
         const fetchData =  (page) => {
             setLoading(true);
-            fetch(`http://localhost:7000/api/transactions/umum/list?page=${currentPage}&halaman=${noJurnalVal}`)
+            fetch(`http://localhost:7000/api/transactions/${typeJurnal}/list?page=${currentPage}&halaman=${noJurnalVal}`)
                 .then((response) => response.json())
                 .then((data) => {
                    data.data.forEach(result => {
@@ -205,12 +211,12 @@ function JournalPage() {
         }
         fetchHalData();
         fetchData(currentPage);
-    }, [currentPage,noJurnalVal,isClicked]);
+    }, [currentPage,noJurnalVal,typeJurnal,isClicked]);
 
     return (
         <div>
             <div className="d-flex justify-content-between align-items-center mb-4">
-                <h2>Jurnal Umum</h2>
+                <h2>Jurnal {typeJurnal}</h2>
                 <Button className="mb-3" onClick={() => setShowModal(true)}>
                     Tambah Jurnal
                 </Button>
@@ -235,7 +241,26 @@ function JournalPage() {
                                         </select></div>
                                     </div>
                                 </div>
-                        <div><br/></div>        
+                        <div className='d-flex align-items-end flex-column mb-3'>
+                            <div className='p-2'>
+                                <div className='input-group'>     
+                                <span className='input-group-text'>Jurnal</span> 
+                                    <select 
+                                        name="type_jurnal"
+                                        className={`form-select ${errors.type_jurnal ? 'is-invalid' : ''}`}
+                                        value={typeJurnal} 
+                                        onChange={e => handleTypeJurnalChange(e)}>
+                                        <option value="umum">umum</option>
+                                        <option value="koreksi">koreksi</option>
+                                        <option value="khusus">khusus</option>
+                                        <option value="penyesuaian">penyesuaian</option>
+                                        <option value="penutup">penutup</option>
+                                        <option value="pembalik">pembalik</option>
+                                    </select> 
+                                </div>
+                            </div>                
+                        </div>       
+                        <div><br/></div> 
                         <Table striped bordered hover>
                             <thead>
                                 <tr>

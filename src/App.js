@@ -5,8 +5,8 @@ import HomePage from './page/HomePage';
 import BukuBesarPage from './page/BukuBesarPage';
 import AkunPage from './page/AkunPage';
 import JurnalPage from './page/JurnalPage';
-
-
+import NeracaLajur from './page/NeracaLajurPage';
+import Setting from './page/SettingPage';
 
 function App() {
     const [menuHidden, setMenuHidden] = useState(false);
@@ -33,6 +33,15 @@ function App() {
                         <li className="nav-item">
                             <a className="nav-link" href="/bukuBesar">Buku Besar</a>
                         </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="/neracaLajur">Neraca Lajur</a>
+                        </li>
+                        <li className="nav-item">
+                            <hr className="hr" style={{color:"white"}} />
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="/setting">Setting</a>
+                        </li>
                     </ul>
                 </nav>
             </div>
@@ -43,6 +52,8 @@ function App() {
                         <Route path="/akun" element={<AkunPage />} />
                         <Route path="/jurnal" element={<JurnalPage />} />
                         <Route path="/bukuBesar" element={<BukuBesarPage />} />
+                        <Route path="/neracaLajur" element={<NeracaLajur />}/>
+                        <Route path="/setting" element={<Setting />} />
                     </Routes>
             </div>
         </div>
